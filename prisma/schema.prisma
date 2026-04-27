@@ -28,15 +28,18 @@ model Player {
 }
 
 model ScoutingReport {
-  id        Int      @id @default(autoincrement())
-  power     Int
-  contact   Int
-  speed     Int
-  fielding  Int
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  userId    Int
-  user      User     @relation(fields: [userId], references: [id])
-  playerId  Int
-  player    Player   @relation(fields: [playerId], references: [id])
+  id               Int      @id @default(autoincrement())
+  power            Int
+  contact          Int
+  speed            Int
+  fielding         Int
+  arm              Int
+  overall          Int
+  executiveSummary String
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+  userId           Int
+  user             User     @relation(fields: [userId], references: [id])
+  playerId         Int
+  player           Player   @relation(fields: [playerId], references: [id])
 }

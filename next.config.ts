@@ -1,7 +1,9 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  // output: 'export' removed because GitHub Pages does not support Node.js API routes or Prisma.
+  // Reverting GitHub Pages specific config because this application
+  // requires a Node.js runtime for API routes and Prisma.
+  // It should be deployed to a full-stack platform like Vercel.
 };
 
 export default nextConfig;

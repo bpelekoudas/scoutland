@@ -1,0 +1,41 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id              Int              @id @default(autoincrement())
+  name            String
+  email           String           @unique
+  reputationScore Int              @default(0)
+  scoutingReports ScoutingReport[]
+}
+
+model Player {
+  id              Int              @id @default(autoincrement())
+  name            String
+  position        String
+  team            String
+  scoutingReports ScoutingReport[]
+}
+
+model ScoutingReport {
+  id               Int      @id @default(autoincrement())
+  power            Int
+  contact          Int
+  speed            Int
+  fielding         Int
+  arm              Int
+  overall          Int
+  executiveSummary String
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+  userId           Int
+  user             User     @relation(fields: [userId], references: [id])
+  playerId         Int
+  player           Player   @relation(fields: [playerId], references: [id])
+}

@@ -1,31 +1,43 @@
 import { NextResponse } from 'next/server';
+import { revalidatePath } from 'next/cache';
 import prisma from '@/lib/prisma';
 
 export async function POST(request: Request) {
   try {
-    const data = await request.json();
+    const body = await request.json();
+    const { playerId, userId, power, contact, speed, fielding, arm, overall, executiveSummary } = body;
 
-    // Ideally, validate data with Zod before insertion
-    const newReport = await prisma.scoutingReport.create({
+    // Validate inputs
+    if (!playerId || !userId) {
+      return NextResponse.json({ error: 'Missing required fields' }, { status: 400 });
+    }
+
+    // Verify player and user exist (basic check)
+    const player = await prisma.player.findUnique({ where: { id: Number(playerId) } });
+    if (!player) {
+      return NextResponse.json({ error: 'Player not found' }, { status: 404 });
+    }
+
+    const report = await prisma.scoutingReport.create({
       data: {
-        power: Number(data.power),
-        contact: Number(data.contact),
-        speed: Number(data.speed),
-        fielding: Number(data.fielding),
-        arm: Number(data.arm),
-        overall: Number(data.overall),
-        executiveSummary: data.executiveSummary,
-        userId: Number(data.userId), // Ensure these are provided by the client
-        playerId: Number(data.playerId), // Ensure these are provided by the client
+        power: Number(power),
+        contact: Number(contact),
+        speed: Number(speed),
+        fielding: Number(fielding),
+        arm: Number(arm),
+        overall: Number(overall),
+        executiveSummary,
+        playerId: Number(playerId),
+        userId: Number(userId),
       },
     });
 
-    return NextResponse.json(newReport, { status: 201 });
+    // Revalidate the player profile page to show the new report
+    revalidatePath(`/players/${playerId}`);
+
+    return NextResponse.json(report, { status: 201 });
   } catch (error) {
-    console.error('Error creating scouting report:', error);
-    return NextResponse.json(
-      { error: 'Failed to create scouting report' },
-      { status: 500 }
-    );
+    console.error('Failed to create scouting report:', error);
+    return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 });
   }
 }

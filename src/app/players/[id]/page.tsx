@@ -5,6 +5,13 @@ interface Props {
   params: Promise<{ id: string }>;
 }
 
+export async function generateStaticParams() {
+  const players = await prisma.player.findMany();
+  return players.map((player) => ({
+    id: player.id.toString(),
+  }));
+}
+
 export default async function PlayerProfile({ params }: Props) {
   const resolvedParams = await params;
   const playerId = parseInt(resolvedParams.id, 10);

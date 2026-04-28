@@ -1,7 +1,7 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  /* config options here */
+  // output: 'export' removed because GitHub Pages does not support Node.js API routes or Prisma.
 };
 
 export default nextConfig;

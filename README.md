@@ -34,3 +34,9 @@ npm run dev
 ```
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+
+## Deployment Notes (GitHub Pages vs. Vercel)
+
+**Note on GitHub Pages:** GitHub Pages is a static file hosting service. Since this application uses Prisma and a Next.js API route for form submissions (requiring a Node.js runtime and a database), it **cannot** be deployed to GitHub Pages without removing the backend features. Attempting to host it on GitHub Pages will result in missing backend logic, build errors, or a blank screen due to routing/asset prefix issues on subpaths.
+
+**Recommended Hosting:** To host this full-stack application (with the SQLite database and API routes), we highly recommend deploying to a platform that supports Next.js full-stack features such as **Vercel** or **Railway**.
